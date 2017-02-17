@@ -15,5 +15,3 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s
       && mv ./kubectl /usr/local/bin/kubectl \
       # Basic check it works.
       && kubectl version --client
-
-ENTRYPOINT ["/usr/local/bin/kubectl"]
