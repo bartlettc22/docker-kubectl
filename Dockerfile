@@ -6,13 +6,14 @@ FROM alpine:latest
 # ADD https://storage.googleapis.com/kubernetes-release/release/v1.5.1/bin/linux/amd64/kubectl /usr/local/bin/kubectl
 
 ENV HOME=/config
+ENV KUBE_VERSION="1.5.2"
 ENV KOPS_VERISON="1.6.1"
 
 RUN set -x && \
     apk add --no-cache curl ca-certificates
 
 # Install kubectl
-RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v$KUBE_VERSION/bin/linux/amd64/kubectl \
       && chmod +x ./kubectl \
       && mv ./kubectl /usr/local/bin/kubectl \
       # Basic check it works.
