@@ -11,7 +11,7 @@ ENV KOPS_VERISON="1.6.1"
 ENV HELM_VERSION="2.5.0"
 
 RUN set -x && \
-    apk add --no-cache curl ca-certificates openssl bash jq
+    apk add --no-cache curl ca-certificates openssl bash jq util-linux
 
 # Install kubectl
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v$KUBE_VERSION/bin/linux/amd64/kubectl \
