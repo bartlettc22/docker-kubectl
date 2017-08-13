@@ -1,17 +1,12 @@
 FROM alpine:latest
 
-# Install kubectl
-# Note: Latest version may be found on:
-# https://aur.archlinux.org/packages/kubectl-bin/
-# ADD https://storage.googleapis.com/kubernetes-release/release/v1.5.1/bin/linux/amd64/kubectl /usr/local/bin/kubectl
-
-ENV HOME=/config
+# Kubernetes tools verions
 ENV KUBE_VERSION="1.5.2"
 ENV KOPS_VERISON="1.6.1"
 ENV HELM_VERSION="2.5.0"
 
 RUN set -x && \
-    apk add --no-cache curl ca-certificates openssl bash jq util-linux
+    apk add --no-cache curl ca-certificates openssl bash jq
 
 # Install kubectl
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v$KUBE_VERSION/bin/linux/amd64/kubectl \
