@@ -1,30 +1,29 @@
 FROM alpine:latest
 
-# Kubernetes tools verions
-ENV KUBE_VERSION="1.5.2"
-ENV KOPS_VERISON="1.6.1"
-ENV HELM_VERSION="2.5.0"
-
-RUN set -x && \
-    apk add --no-cache curl ca-certificates openssl bash jq
+RUN \
+    set -x && \
+    apk update && \
+    apk -Uuv add groff less python py2-pip bash jq mysql-client curl wget ca-certificates openssl && \
+    pip install awscli yq==2.1.1 && \
+    apk --purge -v del py2-pip && \
+    rm /var/cache/apk/*
 
 # Install kubectl
-RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v$KUBE_VERSION/bin/linux/amd64/kubectl \
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
       && chmod +x ./kubectl \
       && mv ./kubectl /usr/local/bin/kubectl \
-      # Basic check it works.
       && kubectl version --client
 
 # Install kops
-RUN curl -LO https://github.com/kubernetes/kops/releases/download/$KOPS_VERISON/kops-linux-amd64 \
+RUN curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64 \
     && chmod +x kops-linux-amd64 \
     && mv kops-linux-amd64 /usr/local/bin/kops \
     && kops version
 
 # Install helm
-RUN curl -LO https://kubernetes-helm.storage.googleapis.com/helm-v$HELM_VERSION-linux-amd64.tar.gz \
-  && tar -zxvf helm-v$HELM_VERSION-linux-amd64.tar.gz \
-  && rm helm-v$HELM_VERSION-linux-amd64.tar.gz \
+RUN curl -L https://kubernetes-helm.storage.googleapis.com/helm-$(curl -s https://api.github.com/repos/kubernetes/helm/releases/latest | grep tag_name | cut -d '"' -f 4)-linux-amd64.tar.gz -o helm.tar.gz \
+  && tar -zxvf helm.tar.gz \
+  && rm helm.tar.gz \
   && chmod +x linux-amd64/helm \
   && mv linux-amd64/helm /usr/local/bin/helm \
-  && rm -rf linux-amd64 \
+  && rm -rf linux-amd64
