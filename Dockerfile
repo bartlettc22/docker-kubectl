@@ -27,3 +27,12 @@ RUN curl -L https://kubernetes-helm.storage.googleapis.com/helm-$(curl -s https:
   && chmod +x linux-amd64/helm \
   && mv linux-amd64/helm /usr/local/bin/helm \
   && rm -rf linux-amd64
+
+RUN LATEST_VAULT_RELEASE=$(curl -s https://api.github.com/repos/hashicorp/vault/tags | jq --raw-output .[0].name[1:]) \
+  && curl -L https://releases.hashicorp.com/vault/${LATEST_VAULT_RELEASE}/vault_${LATEST_VAULT_RELEASE}_linux_amd64.zip -o vault.zip \
+  && unzip vault.zip \
+  && rm vault.zip \
+  && chmod +x vault \
+  && mv vault /usr/local/bin/vault
+
+
