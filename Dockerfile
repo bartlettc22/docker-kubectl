@@ -4,7 +4,7 @@ RUN \
     set -x && \
     apk update && \
     apk -Uuv add groff less python py2-pip bash jq mysql-client curl wget ca-certificates openssl && \
-    pip install awscli yq==2.1.1 && \
+    pip install awscli yq==2.2.0 && \
     apk --purge -v del py2-pip && \
     rm /var/cache/apk/*
 
